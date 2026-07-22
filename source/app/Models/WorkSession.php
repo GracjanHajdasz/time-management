@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable(['started_at', 'ended_at', 'note'])]
 class WorkSession extends Model
 {
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function workBreaks(): HasMany {
+    public function workBreaks(): HasMany
+    {
         return $this->hasMany(WorkBreak::class);
     }
 }
