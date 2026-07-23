@@ -1,8 +1,10 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { dashboard } from '@/routes';
 
 export default function Dashboard() {
+    const { flash, errors } = usePage<any>().props;
+
     return (
         <>
             <Head title="Dashboard" />
@@ -15,6 +17,8 @@ export default function Dashboard() {
                         >
                             Rozpocznij pracę
                         </button>
+                        {flash.success && <div>{flash.success}</div>}
+                        {errors.status && <div>{errors.status}</div>}
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
