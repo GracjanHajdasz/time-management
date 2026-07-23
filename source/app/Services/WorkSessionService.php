@@ -7,12 +7,16 @@ use App\Models\WorkSession;
 
 class WorkSessionService
 {
-    public function startWork(User $user): WorkSession|false
+    private function getActiveSession(User $user): ?WorkSession
     {
-        $activeSession = $user->workSessions()
+        return $user->workSessions()
             ->whereNull('ended_at')
             ->first();
+    }
 
+    public function startWork(User $user): WorkSession|false
+    {
+        $activeSession = $this->getActiveSession($user);
         if($activeSession) {
             return false;
         }
@@ -20,5 +24,19 @@ class WorkSessionService
         return $user->workSessions()->create([
             'started_at' => now(),
         ]);
+    }
+
+    public function endWork(User $user): WorkSession|false
+    {
+        $activeSession = $this->getActiveSession($user);
+
+        if(!$activeSession) {
+            return false;
+        }
+
+        $activeSession->update([
+            'ended_at' => now(),
+        ]);
+        return $activeSession;
     }
 }

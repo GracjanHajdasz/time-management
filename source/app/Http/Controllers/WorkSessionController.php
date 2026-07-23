@@ -20,4 +20,18 @@ class WorkSessionController extends Controller
 
         return back()->with('success', 'Utworzono nową sesję');
     }
+
+    public function end(WorkSessionService $workSessionService)
+    {
+        $user = Auth::user();
+        $session = $workSessionService->endWork($user);
+
+        if($session === false) {
+            return back()->withErrors([
+                'status' => 'Użytkownik nie ma sesji do zakończenia',
+            ]);
+        }
+
+        return back()->with('success', 'Zakończono sesję');
+    }
 }

@@ -2,7 +2,15 @@ import { Head, router, usePage } from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { dashboard } from '@/routes';
 
-export default function Dashboard() {
+type Props = {
+    activeSession: {
+        id: number;
+        started_at: string;
+        ended_at: string | null;
+    } | null;
+};
+
+export default function Dashboard({ activeSession }: Props) {
     const { flash, errors } = usePage<any>().props;
 
     return (
@@ -11,12 +19,34 @@ export default function Dashboard() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <button
-                            onClick={() => router.post('/work-sessions/start')}
-                            className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
-                        >
-                            Rozpocznij pracę
-                        </button>
+                        {activeSession ? (
+                            <div>
+                                <p>Pracujesz</p>
+                                <p>Rozpoczęto: {activeSession.started_at}</p>
+
+                                <button
+                                    className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
+                                    onClick={() =>
+                                        router.post('/work-sessions/end')
+                                    }
+                                >
+                                    Zakończ pracę
+                                </button>
+                            </div>
+                        ) : (
+                            <div>
+                                <p>Nie pracujesz</p>
+
+                                <button
+                                    onClick={() =>
+                                        router.post('/work-sessions/start')
+                                    }
+                                    className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
+                                >
+                                    Rozpocznij pracę
+                                </button>
+                            </div>
+                        )}
                         {flash.success && <div>{flash.success}</div>}
                         {errors.status && <div>{errors.status}</div>}
                     </div>
