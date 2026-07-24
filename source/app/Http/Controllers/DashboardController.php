@@ -18,9 +18,13 @@ class DashboardController extends Controller
         $activeSession = $user->workSessions()
             ->whereNull('ended_at')
             ->first();
+        $userSessions = $user->workSessions()
+            ->latest('started_at')
+            ->get();
 
         return inertia('dashboard', [
             'activeSession' => $activeSession,
+            'userSessions' => $userSessions,
         ]);
     }
 }
