@@ -1,6 +1,8 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { dashboard } from '@/routes';
+import formatDate from '../functions/formatDate';
+import calculateDuration from '../functions/calculateDuration';
 
 type Props = {
     activeSession: {
@@ -67,12 +69,20 @@ export default function Dashboard({ activeSession, userSessions }: Props) {
                                 {userSessions.map((session) => (
                                     <tr key={session.id}>
                                         <td>{session.id}</td>
-                                        <td>{session.started_at}</td>
+                                        <td>
+                                            {formatDate(session.started_at)}
+                                        </td>
                                         <td>
                                             {!session.ended_at ? (
                                                 <span>Trwa</span>
                                             ) : (
-                                                session.ended_at
+                                                formatDate(session.ended_at)
+                                            )}
+                                        </td>
+                                        <td>
+                                            {calculateDuration(
+                                                session.started_at,
+                                                session.ended_at,
                                             )}
                                         </td>
                                     </tr>
