@@ -8,9 +8,15 @@ type Props = {
         started_at: string;
         ended_at: string | null;
     } | null;
+
+    userSessions: {
+        id: number;
+        started_at: string;
+        ended_at: string | null;
+    }[];
 };
 
-export default function Dashboard({ activeSession }: Props) {
+export default function Dashboard({ activeSession, userSessions }: Props) {
     const { flash, errors } = usePage<any>().props;
 
     return (
@@ -51,7 +57,30 @@ export default function Dashboard({ activeSession }: Props) {
                         {errors.status && <div>{errors.status}</div>}
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                        {userSessions.length > 0 ? (
+                            <table>
+                                <tr>
+                                    <th>nr.</th>
+                                    <th>Data i godzina rozpoczęcia</th>
+                                    <th>Data i godzina zakończenia</th>
+                                </tr>
+                                {userSessions.map((session) => (
+                                    <tr key={session.id}>
+                                        <td>{session.id}</td>
+                                        <td>{session.started_at}</td>
+                                        <td>
+                                            {!session.ended_at ? (
+                                                <span>Trwa</span>
+                                            ) : (
+                                                session.ended_at
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </table>
+                        ) : (
+                            <div>brak sesji pracy</div>
+                        )}
                     </div>
                     <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
