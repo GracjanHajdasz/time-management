@@ -21,6 +21,7 @@ class DashboardController extends Controller
         $userSessions = $user->workSessions()
             ->latest('started_at')
             ->get();
+        
 
         return inertia('dashboard', [
             'activeSession' => $activeSession,
