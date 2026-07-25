@@ -17,3 +17,14 @@ it('allows user to start work', function () {
     expect($session->started_at)->not->toBeNull();
     expect($session->ended_at)->toBeNull();
 });
+
+it('does not allow user to start a second work session', function () {
+    $user = User::factory()->create();
+    $service = new WorkSessionService();
+    
+    $firstSession = $service->startWork($user);
+    $secondSession = $service->startWork($user);
+
+    expect($secondSession)->toBeFalse();
+    expect($user->workSessions()->count())->toBe(1);
+});
