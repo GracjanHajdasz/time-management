@@ -10,6 +10,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['started_at', 'ended_at', 'note'])]
 class WorkSession extends Model
 {
+    protected $fillable = [
+        'started_at',
+        'ended_at',
+    ];
+
+    protected $casts = [
+        'started_at' => 'datetime',
+        'ended_at' => 'datetime',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

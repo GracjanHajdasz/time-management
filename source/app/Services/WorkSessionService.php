@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\WorkSession;
+use Carbon\Carbon;
 
 class WorkSessionService
 {
@@ -38,5 +39,25 @@ class WorkSessionService
             'ended_at' => now(),
         ]);
         return $activeSession;
+    }
+
+    public function getTodayWorkMinutes(User $user)
+    {
+        $todaySessions = $user->workSessions()
+            ->whereDate('started_at', today())
+            ->get();
+        $totalMinutes = 0;
+
+        foreach ($todaySessions as $session) {
+            if (!$session->ended_at) {
+                $totalMinutes += $session->started_at
+                    ->diffInMinutes(Carbon::now());
+                } else {
+                    $totalMinutes += $session->started_at
+                    ->diffInMinutes($session->ended_at);
+                }
+        }
+
+        return $totalMinutes;
     }
 }
