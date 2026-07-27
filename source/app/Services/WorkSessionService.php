@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 class WorkSessionService
 {
-    private function getActiveSession(User $user): ?WorkSession
+    public function getActiveSession(User $user): ?WorkSession
     {
         return $user->workSessions()
             ->whereNull('ended_at')
