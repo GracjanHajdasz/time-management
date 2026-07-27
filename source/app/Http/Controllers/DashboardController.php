@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\WorkBreakService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\WorkSessionService;
 
 
 class DashboardController extends Controller
 {
-    public function index(WorkSessionService $workSessionService)
+    public function index(WorkSessionService $workSessionService, WorkBreakService $workBreakService)
     {
         $user = Auth::user();
 
@@ -23,10 +24,15 @@ class DashboardController extends Controller
         $userSessions = $user->workSessions()
             ->latest('started_at')
             ->get();
+        $activeBreak = null;
+
+        if ($activeSession) {
+            $activeBreak = $activeBreak = $workBreakService->getActiveBreak($user);
+        }
         
         $todayWorkMinutes = $workSessionService->getTodayWorkMinutes($user);
         $weekWorkMinutes = $workSessionService->getThisWeekWorkMinutes($user);
-        $monthWorkMinutes = $workSessionService->getThisWeekWorkMinutes($user);
+        $monthWorkMinutes = $workSessionService->getThisMonthWorkMinutes($user);
 
         return inertia('dashboard', [
             'activeSession' => $activeSession,
@@ -34,6 +40,7 @@ class DashboardController extends Controller
             'todayWorkMinutes' => $todayWorkMinutes,
             'weekWorkMinutes' => $weekWorkMinutes,
             'monthWorkMinutes' => $monthWorkMinutes,
+            'activeBreak' => $activeBreak
         ]);
     }
 }
