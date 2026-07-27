@@ -4,10 +4,12 @@ import { dashboard } from '@/routes';
 import { DashboardProps } from '../types/props';
 import ActiveSession from '../components/ActiveSession';
 import WorkSessionHistory from '@/components/WorkSessionHistory';
+import WorkSessionStats from '@/components/WorkSessionStats';
 
 export default function Dashboard({
     activeSession,
     userSessions,
+    todayWorkMinutes,
 }: DashboardProps) {
     return (
         <>
@@ -16,9 +18,7 @@ export default function Dashboard({
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <ActiveSession activeSession={activeSession} />
                     <WorkSessionHistory userSessions={userSessions} />
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
+                    <WorkSessionStats todayWorkMinutes={todayWorkMinutes} />
                 </div>
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
