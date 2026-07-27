@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Services\WorkSessionService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Event\TestSuite\Started;
 
 uses(RefreshDatabase::class);
 
@@ -42,6 +43,7 @@ it('allows user to end an active work session', function () {
     expect($endedSession->ended_at)->not->toBeNull();
 }); 
 
+//=======================================getTodayWorkMinutes
 it('calculates total work minutes for today', function () {
     $user = User::factory()->create();
     $service = new WorkSessionService();
@@ -76,4 +78,72 @@ it('calculates minutes for active session', function () {
     expect($totalMinutes)->toBe(480);
 
     Carbon::setTestNow();
+});
+
+//=======================================getThisWeekWorkMinutes
+it('calculates minutes for one completed session this week', function () {
+    Carbon::setTestNow('2026-07-27 16:00:00');    
+    $user = User::factory()->create();
+    $service = new WorkSessionService();
+
+    $user->workSessions()->create([
+        'started_at' => '2026-07-25 08:00:00',
+        'ended_at' => '2026-07-25 16:00:00',
+    ]);
+
+    $totalMinutes = $service->getThisWeekWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(480);
+});
+
+it('calculates minutes for two sessions this week', function () {
+    Carbon::setTestNow('2026-07-26 16:00:00');
+    $user = User::factory()->create();
+    $service = new WorkSessionService();
+
+    $user->workSessions()->create([
+        'started_at' => '2026-07-25 08:00:00',
+        'ended_at' => '2026-07-25 12:00:00',
+    ]);
+    $user->workSessions()->create([
+        'started_at' => '2026-07-24 08:00:00',
+        'ended_at' => '2026-07-24 12:00:00',
+    ]);
+
+    $totalMinutes = $service->getThisWeekWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(480);
+});
+
+it('calculates minutes with active session this week', function () {
+    Carbon::setTestNow('2026-07-26 16:00:00');
+    $user = User::factory()->create();
+    $service = new WorkSessionService();
+
+    $user->workSessions()->create([
+        'started_at' => '2026-07-26 8:00:00',
+    ]);
+
+    $totalMinutes = $service->getThisWeekWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(480);
+});
+
+it('ignores sessions from previous weeks', function () {
+    Carbon::setTestNow('2026-07-27 17:00:00');
+    $user = User::factory()->create();
+    $service = new WorkSessionService();
+
+    $user->workSessions()->create([
+        'started_at' => '2026-07-25 08:00:00',
+        'ended_at' => '2026-07-25 16:00:00',
+    ]);
+    $user->workSessions()->create([
+        'started_at' => '2026-07-27 08:00:00',
+        'ended_at' => '2026-07-27 16:00:00',
+    ]);
+
+    $totalMinutes = $service->getThisWeekWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(480);
 });
