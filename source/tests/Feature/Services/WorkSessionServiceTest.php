@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Services\WorkSessionService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -40,3 +41,22 @@ it('allows user to end an active work session', function () {
     expect($endedSession->id)->toBe($session->id);
     expect($endedSession->ended_at)->not->toBeNull();
 }); 
+
+it('calculates total work minutes for today', function () {
+    $user = User::factory()->create();
+    $service = new WorkSessionService();
+    $today = Carbon::today();
+
+    $user->workSessions()->create([
+        'started_at' => $today->copy()->setTime(8,0),
+        'ended_at' => $today->copy()->setTime(12,0),
+    ]);
+    $user->workSessions()->create([
+        'started_at' => $today->copy()->setTime(13,0),
+        'ended_at' => $today->copy()->setTime(17,0),
+    ]);
+
+    $totalMinutes = $service->getTodayWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(480);
+});

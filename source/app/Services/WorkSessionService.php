@@ -41,7 +41,7 @@ class WorkSessionService
         return $activeSession;
     }
 
-    public function getTodayWorkMinutes(User $user)
+    public function getTodayWorkMinutes(User $user): int
     {
         $todaySessions = $user->workSessions()
             ->whereDate('started_at', today())
@@ -58,6 +58,6 @@ class WorkSessionService
                 }
         }
 
-        return $totalMinutes;
+        return (int) $totalMinutes;
     }
 }
