@@ -8,6 +8,8 @@ export type DashboardProps = {
     activeSession: WorkSession | null;
     userSessions: WorkSession[];
     todayWorkMinutes: number;
+    weekWorkMinutes: number;
+    monthWorkMinutes: number;
 };
 
 export type ActiveSessionProps = {
@@ -20,4 +22,6 @@ export type WorkSessionHistoryProps = {
 
 export type WorkSessionStatsProps = {
     todayWorkMinutes: number;
+    weekWorkMinutes: number;
+    monthWorkMinutes: number;
 };

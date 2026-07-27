@@ -25,11 +25,15 @@ class DashboardController extends Controller
             ->get();
         
         $todayWorkMinutes = $workSessionService->getTodayWorkMinutes($user);
+        $weekWorkMinutes = $workSessionService->getThisWeekWorkMinutes($user);
+        $monthWorkMinutes = $workSessionService->getThisWeekWorkMinutes($user);
 
         return inertia('dashboard', [
             'activeSession' => $activeSession,
             'userSessions' => $userSessions,
             'todayWorkMinutes' => $todayWorkMinutes,
+            'weekWorkMinutes' => $weekWorkMinutes,
+            'monthWorkMinutes' => $monthWorkMinutes,
         ]);
     }
 }
