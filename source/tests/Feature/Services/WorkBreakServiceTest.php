@@ -71,3 +71,30 @@ it('does not allow to end break when there is no active one', function () {
 
     expect($endedBreak)->toBeFalse();
 });
+
+it('returns active break for user', function () {
+    $user = User::factory()->create();
+
+    $workSessionService = new WorkSessionService();
+    $workBreakService = new WorkBreakService($workSessionService);
+
+    $workSessionService->startWork($user);
+    $break = $workBreakService->startBreak($user);
+
+    $activeBreak = $workBreakService->getActiveBreak($user);
+
+    expect($activeBreak->id)->toBe($break->id);
+});
+
+it('returns null when user has no active break', function () {
+    $user = User::factory()->create();
+
+    $workSessionService = new WorkSessionService();
+    $workBreakService = new WorkBreakService($workSessionService);
+
+    $workSessionService->startWork($user);
+
+    $activeBreak = $workBreakService->getActiveBreak($user);
+
+    expect($activeBreak)->toBeNull();
+});
