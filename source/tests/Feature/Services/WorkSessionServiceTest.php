@@ -60,3 +60,20 @@ it('calculates total work minutes for today', function () {
 
     expect($totalMinutes)->toBe(480);
 });
+
+it('calculates minutes for active session', function () {
+    Carbon::setTestNow('2026-07-27 16:00:00');
+
+    $user = User::factory()->create();
+    $service = new WorkSessionService();
+
+    $user->workSessions()->create([
+        'started_at' => '2026-07-27 08:00:00',
+    ]);
+
+    $totalMinutes = $service->getTodayWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(480);
+
+    Carbon::setTestNow();
+});
