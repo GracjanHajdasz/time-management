@@ -84,7 +84,7 @@ class WorkSessionService
             $totalMinutes += $this->calculateSessionMinutes($session);
         }
     
-        return $totalMinutes;
+        return (int) $totalMinutes;
     }
 
     private function calculateSessionMinutes(WorkSession $session): int
