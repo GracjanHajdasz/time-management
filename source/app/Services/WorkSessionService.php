@@ -49,15 +49,35 @@ class WorkSessionService
         $totalMinutes = 0;
 
         foreach ($todaySessions as $session) {
-            if (!$session->ended_at) {
-                $totalMinutes += $session->started_at
-                    ->diffInMinutes(Carbon::now());
-                } else {
-                    $totalMinutes += $session->started_at
-                    ->diffInMinutes($session->ended_at);
-                }
+            $totalMinutes += $this->calculateSessionMinutes($session);
         }
 
         return (int) $totalMinutes;
+    }
+
+    public function getThisWeekWorkMinutes(User $user): int
+    {
+        $totalMinutes = 0;
+        $thisWeekSessions = $user->workSessions()->whereBetween('started_at', [
+            Carbon::now()->startOfWeek(),
+            Carbon::now()->endOfWeek(),
+        ])->get();
+
+        foreach($thisWeekSessions as $session) {
+            $totalMinutes += $this->calculateSessionMinutes($session);
+        }
+        
+        return (int) $totalMinutes;
+    }
+
+    private function calculateSessionMinutes(WorkSession $session): int
+    {
+        if (! $session->ended_at) {
+            return (int) $session->started_at
+                ->diffInMinutes(now());
+        }
+
+        return (int) $session->started_at
+            ->diffInMinutes($session->ended_at);
     }
 }
