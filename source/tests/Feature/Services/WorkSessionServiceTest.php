@@ -4,7 +4,6 @@ use App\Models\User;
 use App\Services\WorkSessionService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Event\TestSuite\Started;
 
 uses(RefreshDatabase::class);
 
