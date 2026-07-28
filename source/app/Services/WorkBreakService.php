@@ -19,7 +19,7 @@ class WorkBreakService
         if (! $activeSession){
             return false;
         }
-        $activeBreak = $this->getActiveBreak($user);
+        $activeBreak = $this->workBreakQuery->getActiveBreak($activeSession);
         if ($activeBreak) {
             return false;
         }
@@ -32,7 +32,12 @@ class WorkBreakService
 
     public function endBreak(User $user): WorkBreak|false
     {
-        $activeBreak = $this->getActiveBreak($user);
+        $activeSession = $this->workSessionService->getActiveSession($user);
+        if (! $activeSession) {
+            return false;
+        }
+
+        $activeBreak = $this->workBreakQuery->getActiveBreak($activeSession);
         if (! $activeBreak) {
             return false;
         }
@@ -42,10 +47,5 @@ class WorkBreakService
         ]);
 
         return $activeBreak;
-    }
-
-    public function getActiveBreak(User $user): ?WorkBreak
-    {
-        return $this->workBreakQuery->getActiveBreak($user);
     }
 }

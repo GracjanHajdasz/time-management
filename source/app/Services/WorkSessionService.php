@@ -39,7 +39,7 @@ class WorkSessionService
             return false;
         }
 
-        $activeBreak = $this->workBreakQuery->getActiveBreak($user);
+        $activeBreak = $this->workBreakQuery->getActiveBreak($activeSession);
 
         if($activeBreak) {
             return false;
@@ -100,12 +100,35 @@ class WorkSessionService
 
     private function calculateSessionMinutes(WorkSession $session): int
     {
+        $now = now();
+
+        //get work minutes
         if (! $session->ended_at) {
-            return (int) $session->started_at
-                ->diffInMinutes(now());
+            $workMinutes = $session
+                ->started_at
+                ->diffInMinutes($now);
+        } else {
+            $workMinutes = $session
+                ->started_at
+                ->diffInMinutes($session->ended_at);
         }
 
-        return (int) $session->started_at
-            ->diffInMinutes($session->ended_at);
+        //get break minutes
+        $breakMinutes = 0;
+
+        $activeBreak = $this->workBreakQuery->getActiveBreak($session);
+        $breaks = $this->workBreakQuery->getSessionBreaks($session);
+
+        foreach ($breaks as $break) {
+            $breakMinutes += $break->started_at
+                ->diffInMinutes($break->ended_at);
+        }
+
+        if ($activeBreak) {
+            $breakMinutes += $activeBreak->started_at
+                ->diffInMinutes($now);
+        }
+
+        return (int) $workMinutes - $breakMinutes;
     }
 }
