@@ -4,13 +4,17 @@ use App\Models\User;
 use App\Services\WorkSessionService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Queries\WorkBreakQuery;
 
 uses(RefreshDatabase::class);
 
 it('allows user to start work', function () {
     $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
-    $service = new WorkSessionService();
     $session = $service->startWork($user);
 
     expect($session)->not->toBeFalse();
@@ -20,8 +24,11 @@ it('allows user to start work', function () {
 });
 
 it('does not allow user to start a second work session', function () {
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $firstSession = $service->startWork($user);
     $secondSession = $service->startWork($user);
@@ -31,8 +38,11 @@ it('does not allow user to start a second work session', function () {
 });
 
 it('allows user to end an active work session', function () {
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $session = $service->startWork($user);
     $endedSession = $service->endWork($user);
@@ -44,8 +54,11 @@ it('allows user to end an active work session', function () {
 
 //=======================================getTodayWorkMinutes
 it('calculates total work minutes for today', function () {
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
     $today = Carbon::today();
 
     $user->workSessions()->create([
@@ -65,8 +78,11 @@ it('calculates total work minutes for today', function () {
 it('calculates minutes for active session', function () {
     Carbon::setTestNow('2026-07-27 16:00:00');
 
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-07-27 08:00:00',
@@ -82,8 +98,11 @@ it('calculates minutes for active session', function () {
 //=======================================getThisWeekWorkMinutes
 it('calculates minutes for one completed session this week', function () {
     Carbon::setTestNow('2026-07-25 16:00:00');  
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-07-25 08:00:00',
@@ -99,8 +118,11 @@ it('calculates minutes for one completed session this week', function () {
 
 it('calculates minutes for two sessions this week', function () {
     Carbon::setTestNow('2026-07-26 16:00:00');
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-07-25 08:00:00',
@@ -120,8 +142,11 @@ it('calculates minutes for two sessions this week', function () {
 
 it('calculates minutes with active session this week', function () {
     Carbon::setTestNow('2026-07-26 16:00:00');
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-07-26 8:00:00',
@@ -136,8 +161,11 @@ it('calculates minutes with active session this week', function () {
 
 it('ignores sessions from previous weeks', function () {
     Carbon::setTestNow('2026-07-27 17:00:00');
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-07-25 08:00:00',
@@ -158,8 +186,11 @@ it('ignores sessions from previous weeks', function () {
 //=======================================getThisMonthWorkMinutes
 it('calculates minutes for one completed session this month', function () {
     Carbon::setTestNow('2026-07-27 16:00:00');    
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-07-25 08:00:00',
@@ -175,8 +206,11 @@ it('calculates minutes for one completed session this month', function () {
 
 it('calculates minutes for two sessions this month', function () {
     Carbon::setTestNow('2026-07-26 16:00:00');
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-07-25 08:00:00',
@@ -196,8 +230,11 @@ it('calculates minutes for two sessions this month', function () {
 
 it('calculates minutes with active session this month', function () {
     Carbon::setTestNow('2026-07-26 16:00:00');
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-07-26 8:00:00',
@@ -212,8 +249,11 @@ it('calculates minutes with active session this month', function () {
 
 it('ignores sessions from previous months', function () {
     Carbon::setTestNow('2026-07-27 17:00:00');
-    $user = User::factory()->create();
-    $service = new WorkSessionService();
+    $user =  User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
 
     $user->workSessions()->create([
         'started_at' => '2026-06-25 08:00:00',
