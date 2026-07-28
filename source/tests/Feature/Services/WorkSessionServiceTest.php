@@ -5,6 +5,7 @@ use App\Services\WorkSessionService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Queries\WorkBreakQuery;
+use App\Services\WorkBreakService;
 
 uses(RefreshDatabase::class);
 
@@ -269,4 +270,115 @@ it('ignores sessions from previous months', function () {
     expect($totalMinutes)->toBe(480);
 
     Carbon::setTestNow();
+});
+
+//====================work time and work breaks tests
+
+it('subtracts completed break minutes from total work minutes', function () {
+    Carbon::setTestNow('2026-07-27 16:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $session = $user->workSessions()->create([
+        'started_at' => '2026-07-27 08:00:00',
+        'ended_at' => '2026-07-27 16:00:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-27 12:00:00',
+        'ended_at' => '2026-07-27 13:00:00',
+    ]);
+
+    $totalMinutes = $service->getTodayWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(420);
+
+    Carbon::setTestNow();
+});
+
+it('subtracts multiple completed breaks from total work minutes', function () {
+    Carbon::setTestNow('2026-07-27 16:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $session = $user->workSessions()->create([
+        'started_at' => '2026-07-27 08:00:00',
+        'ended_at' => '2026-07-27 16:00:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-27 10:00:00',
+        'ended_at' => '2026-07-27 10:30:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-27 13:00:00',
+        'ended_at' => '2026-07-27 13:30:00',
+    ]);
+
+    $totalMinutes = $service->getTodayWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(420);
+
+    Carbon::setTestNow();
+});
+
+it('subtracts active break minutes from total work minutes', function () {
+    Carbon::setTestNow('2026-07-27 13:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $session = $user->workSessions()->create([
+        'started_at' => '2026-07-27 08:00:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-27 12:00:00',
+    ]);
+
+    $totalMinutes = $service->getTodayWorkMinutes($user);
+
+    expect($totalMinutes)->toBe(240);
+
+    Carbon::setTestNow();
+});
+
+it('does not allow user to end work during active break', function () {
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $service = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $workBreakService = new WorkBreakService(
+        $service,
+        $workBreakQuery
+    );
+
+    $service->startWork($user);
+    $workBreakService->startBreak($user);
+
+    $result = $service->endWork($user);
+
+    expect($result)->toBeFalse();
 });

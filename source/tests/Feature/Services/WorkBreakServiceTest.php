@@ -126,10 +126,10 @@ it('returns active break for user', function () {
         $workBreakQuery
     );
 
-    $workSessionService->startWork($user);
+    $session = $workSessionService->startWork($user);
     $break = $workBreakService->startBreak($user);
 
-    $activeBreak = $workBreakService->getActiveBreak($user);
+    $activeBreak = $workBreakQuery->getActiveBreak($session);
 
     expect($activeBreak->id)->toBe($break->id);
 });
@@ -147,9 +147,9 @@ it('returns null when user has no active break', function () {
         $workBreakQuery
     );
 
-    $workSessionService->startWork($user);
+    $session = $workSessionService->startWork($user);
 
-    $activeBreak = $workBreakService->getActiveBreak($user);
+    $activeBreak = $workBreakQuery->getActiveBreak($session);
 
     expect($activeBreak)->toBeNull();
 });
