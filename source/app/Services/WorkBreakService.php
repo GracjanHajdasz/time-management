@@ -3,26 +3,15 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Models\WorkSession;
 use App\Models\WorkBreak;
+use App\Queries\WorkBreakQuery;
 
 class WorkBreakService
 {
-    public function __construct(protected WorkSessionService $workSessionService) {}
-
-    public function getActiveBreak(User $user): ?WorkBreak
-    {
-        $activeSession = $this->workSessionService
-            ->getActiveSession($user);
-
-        if (! $activeSession) {
-            return null;
-        }
-
-        return $activeSession->workBreaks()
-            ->whereNull('ended_at')
-            ->first();
-    }
+    public function __construct(
+        protected WorkSessionService $workSessionService,
+        protected WorkBreakQuery $workBreakQuery,
+    ) {}
 
     public function startBreak(User $user): WorkBreak|false
     {
@@ -53,5 +42,10 @@ class WorkBreakService
         ]);
 
         return $activeBreak;
+    }
+
+    public function getActiveBreak(User $user): ?WorkBreak
+    {
+        return $this->workBreakQuery->getActiveBreak($user);
     }
 }

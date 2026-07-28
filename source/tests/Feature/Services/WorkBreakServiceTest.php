@@ -6,13 +6,22 @@ use App\Services\WorkSessionService;
 use App\Services\WorkBreakService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Queries\WorkBreakQuery;
 
 uses(RefreshDatabase::class);
 
 it('allows to start break during active session', function () {
     $user = User::factory()->create();
-    $workSessionService = new WorkSessionService();
-    $workBreakService = new WorkBreakService($workSessionService);
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $workBreakService = new WorkBreakService(
+    $workSessionService,
+        $workBreakQuery
+    );
 
     $session = $workSessionService->startWork($user);
     $break = $workBreakService->startBreak($user);
@@ -25,8 +34,16 @@ it('allows to start break during active session', function () {
 
 it('does not allow to start break without active work session', function () {
     $user = User::factory()->create();
-    $workSessionService = new WorkSessionService();
-    $workBreakService = new WorkBreakService($workSessionService);
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+    
+    $workBreakService = new WorkBreakService(
+    $workSessionService,
+        $workBreakQuery
+    );
 
     $break = $workBreakService->startBreak($user);
 
@@ -35,8 +52,16 @@ it('does not allow to start break without active work session', function () {
 
 it('does not allow to start break when another one is active', function () {
     $user = User::factory()->create();
-    $workSessionService = new WorkSessionService();
-    $workBreakService = new WorkBreakService($workSessionService);
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+    
+    $workBreakService = new WorkBreakService(
+    $workSessionService,
+        $workBreakQuery
+    );
     $session = $workSessionService->startWork($user);
 
     $break = $workBreakService->startBreak($user);
@@ -49,8 +74,16 @@ it('does not allow to start break when another one is active', function () {
 
 it('allows to end active break', function () {
     $user = User::factory()->create();
-    $workSessionService = new WorkSessionService();
-    $workBreakService = new WorkBreakService($workSessionService);
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+    
+    $workBreakService = new WorkBreakService(
+    $workSessionService,
+        $workBreakQuery
+    );
     $session = $workSessionService->startWork($user);
 
     $break = $workBreakService->startBreak($user);
@@ -63,8 +96,16 @@ it('allows to end active break', function () {
 
 it('does not allow to end break when there is no active one', function () {
     $user = User::factory()->create();
-    $workSessionService = new WorkSessionService();
-    $workBreakService = new WorkBreakService($workSessionService);
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+    
+    $workBreakService = new WorkBreakService(
+    $workSessionService,
+        $workBreakQuery
+    );
     $session = $workSessionService->startWork($user);
 
     $endedBreak = $workBreakService->endBreak($user);
@@ -74,9 +115,16 @@ it('does not allow to end break when there is no active one', function () {
 
 it('returns active break for user', function () {
     $user = User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
 
-    $workSessionService = new WorkSessionService();
-    $workBreakService = new WorkBreakService($workSessionService);
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+    
+    $workBreakService = new WorkBreakService(
+    $workSessionService,
+        $workBreakQuery
+    );
 
     $workSessionService->startWork($user);
     $break = $workBreakService->startBreak($user);
@@ -88,9 +136,16 @@ it('returns active break for user', function () {
 
 it('returns null when user has no active break', function () {
     $user = User::factory()->create();
+    $workBreakQuery = new WorkBreakQuery();
 
-    $workSessionService = new WorkSessionService();
-    $workBreakService = new WorkBreakService($workSessionService);
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+    
+    $workBreakService = new WorkBreakService(
+    $workSessionService,
+        $workBreakQuery
+    );
 
     $workSessionService->startWork($user);
 

@@ -5,9 +5,14 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\WorkSession;
 use Carbon\Carbon;
+use App\Queries\WorkBreakQuery;
 
 class WorkSessionService
 {
+    public function __construct(
+        protected WorkBreakQuery $workBreakQuery
+    ) {}
+
     public function getActiveSession(User $user): ?WorkSession
     {
         return $user->workSessions()
@@ -30,10 +35,16 @@ class WorkSessionService
     public function endWork(User $user): WorkSession|false
     {
         $activeSession = $this->getActiveSession($user);
-
         if(!$activeSession) {
             return false;
         }
+
+        $activeBreak = $this->workBreakQuery->getActiveBreak($user);
+
+        if($activeBreak) {
+            return false;
+        }
+
 
         $activeSession->update([
             'ended_at' => now(),
