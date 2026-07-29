@@ -29,8 +29,11 @@ class WorkBreakQuery
         foreach( $breaks as $break) {
             $minutes += $break->started_at->diffInMinutes($break->ended_at);
         }
-        $minutes += $activeBreak->started_at
-            ->diffInMinutes(now());
+
+        if ($activeBreak) {
+            $minutes += $activeBreak->started_at
+                ->diffInMinutes(now());
+        }
 
         return (int) $minutes;
     }
