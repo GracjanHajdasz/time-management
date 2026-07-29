@@ -6,9 +6,9 @@ export default function WorkSessionHistory({
     userSessions,
 }: WorkSessionHistoryProps) {
     return (
-        <div className="overflow-hidden rounded-xl border border-sidebar-border/70 bg-card/70 shadow-sm backdrop-blur-sm dark:border-sidebar-border dark:bg-card/40">
+        <div className="max-h-[280px] overflow-hidden rounded-xl border border-sidebar-border/70 bg-card/70 shadow-sm backdrop-blur-sm dark:border-sidebar-border dark:bg-card/40">
             {userSessions.length > 0 ? (
-                <div className="overflow-x-auto">
+                <div className="max-h-[280px] overflow-x-auto overflow-y-auto">
                     <table className="min-w-full border-collapse text-left text-sm text-foreground/80">
                         <thead className="bg-muted/40 text-muted-foreground">
                             <tr>
