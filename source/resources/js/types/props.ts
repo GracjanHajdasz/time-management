@@ -18,6 +18,9 @@ export type DashboardProps = {
     weekWorkMinutes: number;
     monthWorkMinutes: number;
     activeBreak: BreakSession | null;
+    todayBreakMinutes: number;
+    weekBreakMinutes: number;
+    monthBreakMinutes: number;
 };
 
 export type ActiveSessionProps = {
@@ -33,4 +36,7 @@ export type WorkStatsProps = {
     todayWorkMinutes: number;
     weekWorkMinutes: number;
     monthWorkMinutes: number;
+    todayBreakMinutes: number;
+    weekBreakMinutes: number;
+    monthBreakMinutes: number;
 };
