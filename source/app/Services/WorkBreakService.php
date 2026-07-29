@@ -63,4 +63,36 @@ class WorkBreakService
 
         return (int) $totalMinutes;
     }
+
+    public function getThisWeekBreakMinutes(User $user): int
+    {
+        $now = now();
+        $sessions = $user->workSessions()->whereBetween('started_at', [
+            $now->copy()->startOfWeek(),
+            $now->copy()->endOfWeek(),
+        ])->get();
+
+        $totalMinutes = 0;
+        foreach( $sessions as $session ){
+            $totalMinutes += $this->workBreakQuery->calculateBreakMinutes($session);
+        }
+
+        return (int) $totalMinutes;
+    }
+
+    public function getThisMonthBreakMinutes(User $user): int
+    {
+        $now = now();
+        $sessions = $user->workSessions()->whereBetween('started_at', [
+            $now->copy()->startOfMonth(),
+            $now->copy()->endOfMonth(),
+        ])->get();
+
+        $totalMinutes = 0;
+        foreach( $sessions as $session ){
+            $totalMinutes += $this->workBreakQuery->calculateBreakMinutes($session);
+        }
+
+        return (int) $totalMinutes;
+    }
 }
