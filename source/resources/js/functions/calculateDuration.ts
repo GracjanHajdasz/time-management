@@ -1,13 +1,13 @@
 export default function calculateDuration(
-    startedAt: string,
-    endedAt: string | null,
+    startedAt: string | Date,
+    endedAt: string | Date | null,
 ) {
     if (!endedAt) {
         return 'Sesja trwa';
     }
 
-    const start = new Date(startedAt);
-    const end = new Date(endedAt);
+    const start = startedAt instanceof Date ? startedAt : new Date(startedAt);
+    const end = endedAt instanceof Date ? endedAt : new Date(endedAt);
 
     const duration = end.getTime() - start.getTime();
 

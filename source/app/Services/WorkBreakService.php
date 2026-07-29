@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\WorkBreak;
 use App\Queries\WorkBreakQuery;
+use App\Models\WorkSession;
 
 class WorkBreakService
 {

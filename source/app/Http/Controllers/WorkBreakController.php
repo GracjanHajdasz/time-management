@@ -30,6 +30,6 @@ class WorkBreakController extends Controller
                 'status'=>'Użytkownik nie ma przerwy do zakończenia',
             ]);
         }
-        return back()->with('success', 'Zakończono przerwę przerwę');
+        return back()->with('success', 'Zakończono przerwę');
     }
 }

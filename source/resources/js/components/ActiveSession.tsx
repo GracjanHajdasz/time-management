@@ -1,5 +1,7 @@
 import { router, usePage } from '@inertiajs/react';
 import { ActiveSessionProps } from '@/types/props';
+import calculateDuration from '@/functions/calculateDuration';
+import { useState, useEffect } from 'react';
 
 export default function ActiveSession({
     activeSession,
@@ -7,16 +9,24 @@ export default function ActiveSession({
 }: ActiveSessionProps) {
     const { flash, errors } = usePage<any>().props;
 
+    const [now, setNow] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNow(new Date());
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div className="flex min-h-[280px] flex-col justify-between overflow-hidden rounded-xl border border-sidebar-border/70 bg-card/70 p-6 shadow-sm backdrop-blur-sm dark:border-sidebar-border dark:bg-card/40">
             {activeSession ? (
                 <div className="flex flex-1 flex-col gap-5">
                     <div className="space-y-2">
                         <p className="text-lg font-semibold text-foreground">
-                            Pracujesz
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                            Rozpoczęto: {activeSession.started_at}
+                            Pracujesz przez{' '}
+                            {calculateDuration(activeSession.started_at, now)}
                         </p>
                     </div>
 
@@ -56,7 +66,10 @@ export default function ActiveSession({
                             <div className="rounded-lg border border-border bg-muted/40 p-3">
                                 <p className="text-sm text-muted-foreground">
                                     Jesteś na przerwie od{' '}
-                                    {activeBreak.started_at}
+                                    {calculateDuration(
+                                        activeBreak.started_at,
+                                        now,
+                                    )}
                                 </p>
                             </div>
                         ) : null}

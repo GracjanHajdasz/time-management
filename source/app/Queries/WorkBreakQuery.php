@@ -20,4 +20,18 @@ class WorkBreakQuery
             ->whereNotNull('ended_at')
             ->get();
     }
+
+    public function calculateBreakMinutes(WorkSession $workSession): int
+    {
+        $breaks = $this->getSessionBreaks($workSession);
+        $activeBreak = $this->getActiveBreak($workSession);
+
+        foreach( $breaks as $break) {
+            $minutes += $break->started_at->diffInMinutes($break->ended_at);
+        }
+        $minutes += $activeBreak->started_at
+            ->diffInMinutes(now());
+
+        return (int) $minutes;
+    }
 }
