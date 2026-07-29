@@ -4,7 +4,7 @@ import { dashboard } from '@/routes';
 import { DashboardProps } from '../types/props';
 import ActiveSession from '../components/ActiveSession';
 import WorkSessionHistory from '@/components/WorkSessionHistory';
-import WorkSessionStats from '@/components/WorkSessionStats';
+import WorkStats from '../components/WorkStats';
 
 export default function Dashboard({
     activeSession,
@@ -24,7 +24,7 @@ export default function Dashboard({
                         activeBreak={activeBreak}
                     />
                     <WorkSessionHistory userSessions={userSessions} />
-                    <WorkSessionStats
+                    <WorkStats
                         todayWorkMinutes={todayWorkMinutes}
                         weekWorkMinutes={weekWorkMinutes}
                         monthWorkMinutes={monthWorkMinutes}

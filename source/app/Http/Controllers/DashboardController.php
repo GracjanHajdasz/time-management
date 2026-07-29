@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Services\WorkBreakService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\WorkSessionService;
+use App\Queries\WorkBreakQuery;
 
 
 class DashboardController extends Controller
 {
-    public function index(WorkSessionService $workSessionService, WorkBreakService $workBreakService)
+    public function index(
+        WorkSessionService $workSessionService,
+        WorkBreakQuery $workBreakQuery
+        )
     {
         $user = Auth::user();
 
@@ -18,16 +21,14 @@ class DashboardController extends Controller
             abort(403);
         }
 
-        $activeSession = $user->workSessions()
-            ->whereNull('ended_at')
-            ->first();
+        $activeSession = $workSessionService->getActiveSession($user);
         $userSessions = $user->workSessions()
             ->latest('started_at')
             ->get();
         $activeBreak = null;
 
         if ($activeSession) {
-            $activeBreak = $activeBreak = $workBreakService->getActiveBreak($user);
+            $activeBreak = $workBreakQuery->getActiveBreak($activeSession);
         }
         
         $todayWorkMinutes = $workSessionService->getTodayWorkMinutes($user);

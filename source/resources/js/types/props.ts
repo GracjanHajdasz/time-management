@@ -29,7 +29,7 @@ export type WorkSessionHistoryProps = {
     userSessions: WorkSession[];
 };
 
-export type WorkSessionStatsProps = {
+export type WorkStatsProps = {
     todayWorkMinutes: number;
     weekWorkMinutes: number;
     monthWorkMinutes: number;

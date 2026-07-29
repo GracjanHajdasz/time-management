@@ -28,7 +28,7 @@ class WorkSessionController extends Controller
 
         if($session === false) {
             return back()->withErrors([
-                'status' => 'Użytkownik nie ma sesji do zakończenia',
+                'status' => 'Nie udało się zakończyć pracy.',
             ]);
         }
 
