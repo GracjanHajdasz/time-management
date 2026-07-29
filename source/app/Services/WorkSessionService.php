@@ -114,20 +114,7 @@ class WorkSessionService
         }
 
         //get break minutes
-        $breakMinutes = 0;
-
-        $activeBreak = $this->workBreakQuery->getActiveBreak($session);
-        $breaks = $this->workBreakQuery->getSessionBreaks($session);
-
-        foreach ($breaks as $break) {
-            $breakMinutes += $break->started_at
-                ->diffInMinutes($break->ended_at);
-        }
-
-        if ($activeBreak) {
-            $breakMinutes += $activeBreak->started_at
-                ->diffInMinutes($now);
-        }
+        $breakMinutes = $this->workBreakQuery->calculateBreakMinutes($session);
 
         return (int) $workMinutes - $breakMinutes;
     }

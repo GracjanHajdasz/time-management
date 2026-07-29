@@ -49,4 +49,18 @@ class WorkBreakService
 
         return $activeBreak;
     }
+
+    public function getTodayBreakMinutes(User $user): int
+    {
+        $sessions = $user->workSessions()
+            ->whereDate('started_at', today())
+            ->get();
+        
+        $totalMinutes = 0;
+        foreach( $sessions as $session ){
+            $totalMinutes += $this->workBreakQuery->calculateBreakMinutes($session);
+        }
+
+        return (int) $totalMinutes;
+    }
 }

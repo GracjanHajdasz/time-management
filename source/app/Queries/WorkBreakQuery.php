@@ -25,6 +25,7 @@ class WorkBreakQuery
     {
         $breaks = $this->getSessionBreaks($workSession);
         $activeBreak = $this->getActiveBreak($workSession);
+        $minutes = 0;
 
         foreach( $breaks as $break) {
             $minutes += $break->started_at->diffInMinutes($break->ended_at);
