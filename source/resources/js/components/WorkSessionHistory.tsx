@@ -7,7 +7,7 @@ export default function WorkSessionHistory({
     userSessions,
 }: WorkSessionHistoryProps) {
     return (
-        <div className="flex min-h-[320px] flex-col overflow-hidden rounded-2xl border border-sidebar-border/70 bg-card/70 shadow-sm backdrop-blur-sm dark:border-sidebar-border dark:bg-card/40">
+        <div className="flex max-h-[320px] flex-col overflow-hidden rounded-2xl border border-sidebar-border/70 bg-card/70 shadow-sm backdrop-blur-sm dark:border-sidebar-border dark:bg-card/40">
             <div className="flex items-center gap-3 border-b border-sidebar-border/70 px-5 py-4">
                 <div className="rounded-xl border border-sidebar-border/70 bg-background/70 p-2.5">
                     <History className="h-4 w-4 text-foreground" />
