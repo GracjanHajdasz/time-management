@@ -173,3 +173,223 @@ it('does not allow to end work when user has an active break', function () {
 
     expect($result)->toBeFalse();
 });
+
+it('calculates today break minutes', function () {
+    Carbon::setTestNow('2026-07-29 16:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $workBreakService = new WorkBreakService(
+        $workSessionService,
+        $workBreakQuery
+    );
+
+    $session = $user->workSessions()->create([
+        'started_at' => '2026-07-29 08:00:00',
+        'ended_at' => '2026-07-29 16:00:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-29 12:00:00',
+        'ended_at' => '2026-07-29 13:00:00',
+    ]);
+
+    expect($workBreakService->getTodayBreakMinutes($user))
+        ->toBe(60);
+
+    Carbon::setTestNow();
+});
+
+it('calculates active break minutes today', function () {
+    Carbon::setTestNow('2026-07-29 13:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $workBreakService = new WorkBreakService(
+        $workSessionService,
+        $workBreakQuery
+    );
+
+    $session = $user->workSessions()->create([
+        'started_at' => '2026-07-29 08:00:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-29 12:00:00',
+    ]);
+
+    expect($workBreakService->getTodayBreakMinutes($user))
+        ->toBe(60);
+
+    Carbon::setTestNow();
+});
+
+it('calculates break minutes this week', function () {
+    Carbon::setTestNow('2026-07-29 16:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $workBreakService = new WorkBreakService(
+        $workSessionService,
+        $workBreakQuery
+    );
+
+    $session = $user->workSessions()->create([
+        'started_at' => '2026-07-28 08:00:00',
+        'ended_at' => '2026-07-28 16:00:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-28 10:00:00',
+        'ended_at' => '2026-07-28 10:30:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-28 13:00:00',
+        'ended_at' => '2026-07-28 14:00:00',
+    ]);
+
+    expect($workBreakService->getThisWeekBreakMinutes($user))
+        ->toBe(90);
+
+    Carbon::setTestNow();
+});
+
+it('ignores breaks from previous weeks', function () {
+    Carbon::setTestNow('2026-07-29 16:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $workBreakService = new WorkBreakService(
+        $workSessionService,
+        $workBreakQuery
+    );
+
+    $oldSession = $user->workSessions()->create([
+        'started_at' => '2026-07-15 08:00:00',
+        'ended_at' => '2026-07-15 16:00:00',
+    ]);
+
+    $oldSession->workBreaks()->create([
+        'started_at' => '2026-07-15 12:00:00',
+        'ended_at' => '2026-07-15 13:00:00',
+    ]);
+
+    $currentSession = $user->workSessions()->create([
+        'started_at' => '2026-07-28 08:00:00',
+        'ended_at' => '2026-07-28 16:00:00',
+    ]);
+
+    $currentSession->workBreaks()->create([
+        'started_at' => '2026-07-28 12:00:00',
+        'ended_at' => '2026-07-28 12:30:00',
+    ]);
+
+    expect($workBreakService->getThisWeekBreakMinutes($user))
+        ->toBe(30);
+
+    Carbon::setTestNow();
+});
+
+it('calculates break minutes this month', function () {
+    Carbon::setTestNow('2026-07-29 16:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $workBreakService = new WorkBreakService(
+        $workSessionService,
+        $workBreakQuery
+    );
+
+    $session = $user->workSessions()->create([
+        'started_at' => '2026-07-28 08:00:00',
+        'ended_at' => '2026-07-28 16:00:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-28 10:00:00',
+        'ended_at' => '2026-07-28 10:30:00',
+    ]);
+
+    $session->workBreaks()->create([
+        'started_at' => '2026-07-18 13:00:00',
+        'ended_at' => '2026-07-18 14:00:00',
+    ]);
+
+    expect($workBreakService->getThisWeekBreakMinutes($user))
+        ->toBe(90);
+
+    Carbon::setTestNow();
+});
+
+it('ignores breaks from previous months', function () {
+    Carbon::setTestNow('2026-07-29 16:00:00');
+
+    $user = User::factory()->create();
+
+    $workBreakQuery = new WorkBreakQuery();
+
+    $workSessionService = new WorkSessionService(
+        $workBreakQuery
+    );
+
+    $workBreakService = new WorkBreakService(
+        $workSessionService,
+        $workBreakQuery
+    );
+
+    $oldSession = $user->workSessions()->create([
+        'started_at' => '2026-06-15 08:00:00',
+        'ended_at' => '2026-06-15 16:00:00',
+    ]);
+
+    $oldSession->workBreaks()->create([
+        'started_at' => '2026-06-15 12:00:00',
+        'ended_at' => '2026-06-15 13:00:00',
+    ]);
+
+    $currentSession = $user->workSessions()->create([
+        'started_at' => '2026-07-28 08:00:00',
+        'ended_at' => '2026-07-28 16:00:00',
+    ]);
+
+    $currentSession->workBreaks()->create([
+        'started_at' => '2026-07-28 12:00:00',
+        'ended_at' => '2026-07-28 12:30:00',
+    ]);
+
+    expect($workBreakService->getThisWeekBreakMinutes($user))
+        ->toBe(30);
+
+    Carbon::setTestNow();
+});
