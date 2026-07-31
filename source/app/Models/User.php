@@ -57,11 +57,11 @@ class User extends Authenticatable implements PasskeyUser
 
     public function isAdmin(): bool
     {
-        return $this->$this->hasRole('admin');
+        return $this->hasRole('admin');
     }
 
     public function isEmployee(): bool
     {
-        return $this->$this->hasRole('employee');
+        return $this->hasRole('employee');
     }
 }
