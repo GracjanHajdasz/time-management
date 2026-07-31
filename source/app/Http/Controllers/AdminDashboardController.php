@@ -8,6 +8,6 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        return inertia('admin');
+        return inertia()->render('admin/dashboard');
     }
 }
