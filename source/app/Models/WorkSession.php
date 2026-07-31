@@ -12,6 +12,7 @@ class WorkSession extends Model
     protected $fillable = [
         'started_at',
         'ended_at',
+        'note'
     ];
 
     protected $casts = [
