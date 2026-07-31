@@ -40,3 +40,11 @@ export type WorkStatsProps = {
     weekBreakMinutes: number;
     monthBreakMinutes: number;
 };
+
+//ADMIN DASHBOARD
+export type AdminDashboardProps = {
+    stats: {
+        employeesCount: number;
+        activeSessions: number;
+    };
+};
