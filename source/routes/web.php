@@ -3,6 +3,7 @@
 use App\Http\Controllers\WorkSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WorkBreakController;
+use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -18,6 +19,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('work-break.start');
     Route::post('/work-breaks/end', [WorkBreakController::class, 'end'])
         ->name('work-break.end');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
 });
 
 require __DIR__.'/settings.php';
