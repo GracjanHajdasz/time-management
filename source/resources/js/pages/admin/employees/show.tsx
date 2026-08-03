@@ -1,8 +1,13 @@
 import { ShowEmployeesProps } from '@/types/props';
 import { Head } from '@inertiajs/react';
 import formatMinutes from '@/functions/formatMinutes';
+import WorkSessionHistory from '@/components/WorkSessionHistory';
 
-export default function Show({ employee, employeeStats }: ShowEmployeesProps) {
+export default function Show({
+    employee,
+    employeeStats,
+    employeeWorkSessions,
+}: ShowEmployeesProps) {
     return (
         <>
             <Head title={employee.name} />
@@ -42,6 +47,7 @@ export default function Show({ employee, employeeStats }: ShowEmployeesProps) {
                     </div>
                 </div>
             </div>
+            <WorkSessionHistory userSessions={employeeWorkSessions} />
         </>
     );
 }

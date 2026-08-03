@@ -1,3 +1,11 @@
+export type PaginatedData<T> = {
+    data: T[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+};
+
 export type WorkSession = {
     id: number;
     started_at: string;
@@ -13,7 +21,7 @@ export type BreakSession = {
 
 export type DashboardProps = {
     activeSession: WorkSession | null;
-    userSessions: WorkSession[];
+    userSessions: PaginatedData<WorkSession>;
     todayWorkMinutes: number;
     weekWorkMinutes: number;
     monthWorkMinutes: number;
@@ -29,7 +37,7 @@ export type ActiveSessionProps = {
 };
 
 export type WorkSessionHistoryProps = {
-    userSessions: WorkSession[];
+    userSessions: PaginatedData<WorkSession>;
 };
 
 export type WorkStatsProps = {
@@ -68,4 +76,5 @@ export type ShowEmployeesProps = {
         weekWorkMinutes: number;
         monthWorkMinutes: number;
     };
+    employeeWorkSessions: PaginatedData<WorkSession>;
 };

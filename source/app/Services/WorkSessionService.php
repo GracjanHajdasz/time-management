@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\WorkSession;
 use Carbon\Carbon;
 use App\Queries\WorkBreakQuery;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class WorkSessionService
 {
@@ -14,9 +14,9 @@ class WorkSessionService
         protected WorkBreakQuery $workBreakQuery
     ) {}
 
-    public function getUserSessions(User $user): Collection
+    public function getUserSessions(User $user): LengthAwarePaginator
     {
-        return $user->workSessions()->latest('started_at')->get();
+        return $user->workSessions()->latest('started_at')->paginate(20);
 
     }
 
