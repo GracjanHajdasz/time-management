@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Services\WorkSessionService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class EmployeeService
@@ -13,10 +14,10 @@ class EmployeeService
         protected WorkBreakService $workBreakService,
     ) {}
 
-    public function getEmployees(): Collection
+    public function getEmployees(): LengthAwarePaginator
     {
         return User::role('employee')
-            ->get();
+            ->paginate(20);
     }
 
     public function getEmployeeStats(User $employee): array

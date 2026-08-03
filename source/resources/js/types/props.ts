@@ -67,9 +67,15 @@ export type EmployeesIndexProps = {
 
 export type ShowEmployeesProps = {
     employee: {
-        id: number;
-        name: string;
-        email: string;
+        data: {
+            id: number;
+            name: string;
+            email: string;
+        };
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
     };
     employeeStats: {
         todayWorkMinutes: number;
