@@ -11,6 +11,7 @@ class WorkBreak extends Model
     protected $fillable = [
         'started_at',
         'ended_at',
+        'work_session_id',
     ];
 
     protected $casts = [

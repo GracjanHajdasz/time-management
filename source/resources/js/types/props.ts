@@ -75,6 +75,9 @@ export type ShowEmployeesProps = {
         todayWorkMinutes: number;
         weekWorkMinutes: number;
         monthWorkMinutes: number;
+        todayBreakMinutes: number;
+        weekBreakMinutes: number;
+        monthBreakMinutes: number;
     };
     employeeWorkSessions: PaginatedData<WorkSession>;
 };

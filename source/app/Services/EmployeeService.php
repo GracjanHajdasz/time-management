@@ -10,6 +10,7 @@ class EmployeeService
 {
     public function __construct(
         protected WorkSessionService $workSessionService,
+        protected WorkBreakService $workBreakService,
     ) {}
 
     public function getEmployees(): Collection
@@ -23,11 +24,21 @@ class EmployeeService
         return [
             'todayWorkMinutes' => $this->workSessionService
                 ->getTodayWorkMinutes($employee),
+
             'weekWorkMinutes' => $this->workSessionService
                 ->getThisWeekWorkMinutes($employee),
 
             'monthWorkMinutes' => $this->workSessionService
                 ->getThisMonthWorkMinutes($employee),
+
+            'todayBreakMinutes' => $this->workBreakService
+                ->getTodayBreakMinutes($employee),
+
+            'weekBreakMinutes' => $this->workBreakService
+                ->getThisWeekBreakMinutes($employee),
+
+            'monthBreakMinutes' => $this->workBreakService
+                ->getThisMonthBreakMinutes($employee),
         ];
     }
 }
