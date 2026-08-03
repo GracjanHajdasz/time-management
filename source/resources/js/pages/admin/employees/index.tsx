@@ -1,6 +1,9 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { EmployeesIndexProps } from '@/types/props';
 import Pagination from '@/components/Pagination';
+import { show } from '@/actions/App/Http/Controllers/EmployeeController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function Index({ employees }: EmployeesIndexProps) {
     return (
@@ -9,7 +12,16 @@ export default function Index({ employees }: EmployeesIndexProps) {
 
             <div className="p-6">
                 <div className="flex items-center justify-between gap-4">
-                    <h1 className="text-2xl font-bold">Employees</h1>
+                    <div className="flex flex-col gap-2">
+                        <Link
+                            href={dashboardIndex()}
+                            className="inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                            Powrót do dashboardu
+                        </Link>
+                        <h1 className="text-2xl font-bold">Employees</h1>
+                    </div>
                     <Pagination paginatedData={employees} />
                 </div>
                 <div className="mt-6 space-y-3">
@@ -23,6 +35,14 @@ export default function Index({ employees }: EmployeesIndexProps) {
                             <p className="text-sm text-muted-foreground">
                                 {employee.email}
                             </p>
+
+                            <Link
+                                href={show(employee.id)}
+                                className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                            >
+                                Zobacz szczegóły
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
                         </div>
                     ))}
                 </div>

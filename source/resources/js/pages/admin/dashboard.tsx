@@ -1,5 +1,6 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { AdminDashboardProps } from '@/types/props';
+import { index } from '@/actions/App/Http/Controllers/EmployeeController';
 
 export default function Dashboard({ stats }: AdminDashboardProps) {
     return (
@@ -10,7 +11,7 @@ export default function Dashboard({ stats }: AdminDashboardProps) {
                 <h1 className="text-2xl font-bold">Admin Dashboard</h1>
 
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
-                    <div className="rounded-lg border p-6">
+                    <Link className="rounded-lg border p-6" href={index()}>
                         <p className="text-sm text-muted-foreground">
                             Employees
                         </p>
@@ -18,7 +19,7 @@ export default function Dashboard({ stats }: AdminDashboardProps) {
                         <p className="text-3xl font-bold">
                             {stats.employeesCount}
                         </p>
-                    </div>
+                    </Link>
 
                     <div className="rounded-lg border p-6">
                         <p className="text-sm text-muted-foreground">
