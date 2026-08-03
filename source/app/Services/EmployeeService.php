@@ -17,7 +17,7 @@ class EmployeeService
     public function getEmployees(): LengthAwarePaginator
     {
         return User::role('employee')
-            ->paginate(20);
+            ->paginate(7);
     }
 
     public function getEmployeeStats(User $employee): array

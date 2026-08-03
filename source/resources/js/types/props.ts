@@ -6,6 +6,16 @@ export type PaginatedData<T> = {
     total: number;
 };
 
+export type PaginationProps<T> = {
+    paginatedData: PaginatedData<T>;
+};
+
+export type Employee = {
+    id: number;
+    name: string;
+    email: string;
+};
+
 export type WorkSession = {
     id: number;
     started_at: string;
@@ -59,23 +69,23 @@ export type AdminDashboardProps = {
 
 export type EmployeesIndexProps = {
     employees: {
-        id: number;
-        name: string;
-        email: string;
-    }[];
-};
-
-export type ShowEmployeesProps = {
-    employee: {
         data: {
             id: number;
             name: string;
             email: string;
-        };
+        }[];
         current_page: number;
         last_page: number;
         per_page: number;
         total: number;
+    };
+};
+
+export type ShowEmployeesProps = {
+    employee: {
+        id: number;
+        name: string;
+        email: string;
     };
     employeeStats: {
         todayWorkMinutes: number;
