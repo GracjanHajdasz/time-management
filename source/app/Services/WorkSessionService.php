@@ -6,12 +6,19 @@ use App\Models\User;
 use App\Models\WorkSession;
 use Carbon\Carbon;
 use App\Queries\WorkBreakQuery;
+use Illuminate\Database\Eloquent\Collection;
 
 class WorkSessionService
 {
     public function __construct(
         protected WorkBreakQuery $workBreakQuery
     ) {}
+
+    public function getUserSessions(User $user): Collection
+    {
+        return $user->workSessions()->latest('started_at')->get();
+
+    }
 
     public function getActiveSession(User $user): ?WorkSession
     {

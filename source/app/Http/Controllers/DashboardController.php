@@ -24,9 +24,7 @@ class DashboardController extends Controller
         }
 
         $activeSession = $workSessionService->getActiveSession($user);
-        $userSessions = $user->workSessions()
-            ->latest('started_at')
-            ->get();
+        $userSessions = $workSessionService->getUserSessions($user);
         $activeBreak = null;
 
         if ($activeSession) {
