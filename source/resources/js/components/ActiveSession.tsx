@@ -3,6 +3,14 @@ import { ActiveSessionProps } from '@/types/props';
 import calculateDuration from '@/functions/calculateDuration';
 import { useState, useEffect } from 'react';
 import { Clock3, Coffee, Play, Square } from 'lucide-react';
+import {
+    end as endWorkSession,
+    start as startWorkSession,
+} from '@/actions/App/Http/Controllers/WorkSessionController';
+import {
+    end as endWorkBreak,
+    start as startWorkBreak,
+} from '@/actions/App/Http/Controllers/WorkBreakController';
 
 export default function ActiveSession({
     activeSession,
@@ -70,7 +78,7 @@ export default function ActiveSession({
                     <div className="flex flex-wrap gap-3">
                         <button
                             className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-sidebar-border/70 bg-background/80 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                            onClick={() => router.post('/work-sessions/end')}
+                            onClick={() => router.post(endWorkSession())}
                         >
                             <Square className="h-4 w-4" />
                             Zakończ pracę
@@ -78,7 +86,7 @@ export default function ActiveSession({
 
                         {activeBreak ? (
                             <button
-                                onClick={() => router.post('/work-breaks/end')}
+                                onClick={() => router.post(endWorkBreak())}
                                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-sidebar-border/70 bg-background/80 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                             >
                                 <Coffee className="h-4 w-4" />
@@ -86,9 +94,7 @@ export default function ActiveSession({
                             </button>
                         ) : (
                             <button
-                                onClick={() =>
-                                    router.post('/work-breaks/start')
-                                }
+                                onClick={() => router.post(startWorkBreak())}
                                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-sidebar-border/70 bg-background/80 px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                             >
                                 <Coffee className="h-4 w-4" />
@@ -127,7 +133,7 @@ export default function ActiveSession({
                     </div>
 
                     <button
-                        onClick={() => router.post('/work-sessions/start')}
+                        onClick={() => router.post(startWorkSession())}
                         className="inline-flex items-center gap-2 rounded-xl border border-sidebar-border/70 bg-background/80 px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                     >
                         <Play className="h-4 w-4" />
