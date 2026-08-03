@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\WorkSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WorkBreakController;
@@ -24,6 +25,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminDashboardController::class, 'index'])
         ->name('admin.dashboard');
+    Route::get('/admin/employees', [EmployeeController::class, 'index'])
+        ->name('admin.employees.index');
+    Route::get('/admin/employees/{employee}', [EmployeeController::class, 'show'])
+        ->name('admin.employees.show');
 });
 
 require __DIR__.'/settings.php';

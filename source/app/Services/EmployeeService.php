@@ -21,12 +21,12 @@ class EmployeeService
     public function getEmployeeStats(User $employee): array
     {
         return [
-            'todayMinutes' => $this->workSessionService
+            'todayWorkMinutes' => $this->workSessionService
                 ->getTodayWorkMinutes($employee),
-            'weekMinutes' => $this->workSessionService
+            'weekWorkMinutes' => $this->workSessionService
                 ->getThisWeekWorkMinutes($employee),
 
-            'monthMinutes' => $this->workSessionService
+            'monthWorkMinutes' => $this->workSessionService
                 ->getThisMonthWorkMinutes($employee),
         ];
     }

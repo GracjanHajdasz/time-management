@@ -48,3 +48,24 @@ export type AdminDashboardProps = {
         activeSessions: number;
     };
 };
+
+export type EmployeesIndexProps = {
+    employees: {
+        id: number;
+        name: string;
+        email: string;
+    }[];
+};
+
+export type ShowEmployeesProps = {
+    employee: {
+        id: number;
+        name: string;
+        email: string;
+    };
+    employeeStats: {
+        todayWorkMinutes: number;
+        weekWorkMinutes: number;
+        monthWorkMinutes: number;
+    };
+};
