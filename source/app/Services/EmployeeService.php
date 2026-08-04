@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Data\EmployeeStatsData;
+use App\Data\EmployeeData;
 use App\Models\User;
 use App\Services\WorkSessionService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 
 class EmployeeService
 {
@@ -16,30 +17,36 @@ class EmployeeService
 
     public function getEmployees(): LengthAwarePaginator
     {
-        return User::role('employee')
+        $employees = User::role('employee')
             ->paginate(7);
+        $employees->through(
+            fn(User $employee) => EmployeeData::from($employee)
+        );
+
+        return $employees;
     }
 
-    public function getEmployeeStats(User $employee): array
+    public function getEmployeeStats(User $employee): EmployeeStatsData
     {
-        return [
-            'todayWorkMinutes' => $this->workSessionService
+        return new EmployeeStatsData(
+            todayWorkMinutes: $this->workSessionService
                 ->getTodayWorkMinutes($employee),
-
-            'weekWorkMinutes' => $this->workSessionService
-                ->getThisWeekWorkMinutes($employee),
-
-            'monthWorkMinutes' => $this->workSessionService
+            
+            monthWorkMinutes: $this->workSessionService
                 ->getThisMonthWorkMinutes($employee),
-
-            'todayBreakMinutes' => $this->workBreakService
+            
+            weekWorkMinutes: $this->workSessionService
+                ->getThisWeekWorkMinutes($employee),
+            
+            todayBreakMinutes: $this->workBreakService
                 ->getTodayBreakMinutes($employee),
 
-            'weekBreakMinutes' => $this->workBreakService
+            weekBreakMinutes: $this->workBreakService
                 ->getThisWeekBreakMinutes($employee),
 
-            'monthBreakMinutes' => $this->workBreakService
+            monthBreakMinutes: $this->workBreakService
                 ->getThisMonthBreakMinutes($employee),
-        ];
+        );
+            
     }
 }

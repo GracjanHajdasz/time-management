@@ -16,7 +16,9 @@
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.14",
-        "spatie/laravel-permission": "*"
+        "spatie/laravel-data": "*",
+        "spatie/laravel-permission": "*",
+        "spatie/laravel-typescript-transformer": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "*",
