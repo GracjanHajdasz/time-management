@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\WorkSessionData;
 use App\Models\User;
 use App\Models\WorkSession;
 use Carbon\Carbon;
@@ -16,8 +17,9 @@ class WorkSessionService
 
     public function getUserSessions(User $user): LengthAwarePaginator
     {
-        return $user->workSessions()->latest('started_at')->paginate(20);
-
+        return $user->workSessions()
+            ->latest('started_at')
+            ->paginate(20);
     }
 
     public function getActiveSession(User $user): ?WorkSession

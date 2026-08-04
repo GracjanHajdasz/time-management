@@ -23,19 +23,17 @@ it('returns only employees', function () {
     $employee = User::factory()->create();
     $employee->assignRole('employee');
 
-
     $admin = User::factory()->create();
     $admin->assignRole('admin');
-
 
     $service = app(EmployeeService::class);
 
     $employees = $service->getEmployees();
 
+    expect($employees->total())
+        ->toBe(1);
 
-    expect($employees)
-        ->toHaveCount(1)
-        ->and($employees->first()->id)
+    expect($employees->items()[0]->id)
         ->toBe($employee->id);
 
 });
@@ -57,7 +55,7 @@ it('returns employee work statistics', function () {
     $stats = $service->getEmployeeStats($employee);
 
 
-    expect($stats['todayMinutes'])
+    expect($stats->todayWorkMinutes)
         ->toBe(480);
 
 });

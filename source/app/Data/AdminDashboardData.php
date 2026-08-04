@@ -6,11 +6,10 @@ use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class EmployeeData extends Data
+class AdminDashboardData extends Data
 {
     public function __construct(
-        public int $id,
-        public string $name,
-        public string $email,
+        public int $employeesCount,
+        public int $activeSessions,
     ) {}
 }

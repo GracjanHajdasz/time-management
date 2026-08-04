@@ -2,15 +2,17 @@
 
 namespace App\Data;
 
+use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class EmployeeData extends Data
+class WorkBreakData extends Data
 {
     public function __construct(
         public int $id,
-        public string $name,
-        public string $email,
+        public int $workSessionId,
+        public Carbon $startedAt,
+        public ?Carbon $endedAt,
     ) {}
 }

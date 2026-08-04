@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\EmployeeService;
 use Inertia\Response;
 use App\Services\WorkSessionService;
+use App\Data\EmployeeData;
 
 class EmployeeController extends Controller
 {
@@ -25,7 +26,7 @@ class EmployeeController extends Controller
     public function show(User $employee): Response
     {
         return inertia()->render('admin/employees/show', [
-            'employee' => $employee,
+            'employee' => EmployeeData::from($employee),
             'employeeStats' => $this->employeeService->getEmployeeStats($employee),
             'employeeWorkSessions' => $this->workSessionService->getUserSessions($employee),
         ]);
