@@ -1,25 +1,21 @@
-import { WorkStatsProps } from '@/types/props';
 import formatMinutes from '@/functions/formatMinutes';
 import { BarChart3, Coffee } from 'lucide-react';
 
-export default function WorkSessionStats({
-    todayWorkMinutes,
-    weekWorkMinutes,
-    monthWorkMinutes,
-    todayBreakMinutes,
-    weekBreakMinutes,
-    monthBreakMinutes,
-}: WorkStatsProps) {
+type Props = {
+    stats: App.Data.EmployeeStatsData;
+};
+
+export default function WorkSessionStats({ stats }: Props) {
     const workStats = [
-        { label: 'Dzisiaj', value: formatMinutes(todayWorkMinutes) },
-        { label: 'Ten tydzień', value: formatMinutes(weekWorkMinutes) },
-        { label: 'Ten miesiąc', value: formatMinutes(monthWorkMinutes) },
+        { label: 'Dzisiaj', value: formatMinutes(stats.todayWorkMinutes) },
+        { label: 'Ten tydzień', value: formatMinutes(stats.weekWorkMinutes) },
+        { label: 'Ten miesiąc', value: formatMinutes(stats.monthWorkMinutes) },
     ];
 
     const breakStats = [
-        { label: 'Dzisiaj', value: formatMinutes(todayBreakMinutes) },
-        { label: 'Ten tydzień', value: formatMinutes(weekBreakMinutes) },
-        { label: 'Ten miesiąc', value: formatMinutes(monthBreakMinutes) },
+        { label: 'Dzisiaj', value: formatMinutes(stats.todayBreakMinutes) },
+        { label: 'Ten tydzień', value: formatMinutes(stats.weekBreakMinutes) },
+        { label: 'Ten miesiąc', value: formatMinutes(stats.monthBreakMinutes) },
     ];
 
     return (

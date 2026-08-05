@@ -8,7 +8,7 @@ declare namespace App {
             activeSession: App.Data.WorkSessionData | null;
             activeBreak: App.Data.WorkBreakData | null;
             stats: App.Data.EmployeeStatsData;
-            sessions: any;
+            sessions: App.Data.PaginationData;
         };
         export type EmployeeData = {
             id: number;
@@ -23,16 +23,23 @@ declare namespace App {
             weekBreakMinutes: number;
             monthBreakMinutes: number;
         };
+        export type PaginationData = {
+            data: Array<any>;
+            currentPage: number;
+            lastPage: number;
+            perPage: number;
+            total: number;
+        };
         export type WorkBreakData = {
             id: number;
             workSessionId: number;
-            startedAt: undefined;
-            endedAt: undefined | null;
+            startedAt: string;
+            endedAt: string | null;
         };
         export type WorkSessionData = {
             id: number;
-            startedAt: undefined;
-            endedAt: undefined | null;
+            startedAt: string;
+            endedAt: string | null;
         };
     }
 }

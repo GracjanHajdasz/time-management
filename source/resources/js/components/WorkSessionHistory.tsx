@@ -1,12 +1,15 @@
 import formatDate from '../functions/formatDate';
 import calculateDuration from '../functions/calculateDuration';
-import { WorkSessionHistoryProps } from '../types/props';
 import { History } from 'lucide-react';
 import Pagination from './Pagination';
 
-export default function WorkSessionHistory({
-    userSessions,
-}: WorkSessionHistoryProps) {
+type Props = {
+    userSessions: Omit<App.Data.PaginationData, 'data'> & {
+        data: App.Data.WorkSessionData[];
+    };
+};
+
+export default function WorkSessionHistory({ userSessions }: Props) {
     return (
         <div className="flex max-h-[320px] flex-col overflow-hidden rounded-2xl border border-sidebar-border/70 bg-card/70 shadow-sm backdrop-blur-sm dark:border-sidebar-border dark:bg-card/40">
             <div className="flex items-center gap-3 border-b border-sidebar-border/70 px-5 py-4">
@@ -49,27 +52,27 @@ export default function WorkSessionHistory({
                             {userSessions.data.map((session) => (
                                 <tr
                                     key={session.id}
-                                    className={`transition-colors ${!session.ended_at ? 'bg-emerald-500/10' : 'hover:bg-muted/50'}`}
+                                    className={`transition-colors ${!session.endedAt ? 'bg-emerald-500/10' : 'hover:bg-muted/50'}`}
                                 >
                                     <td className="px-5 py-3 text-foreground/90">
                                         {session.id}
                                     </td>
                                     <td className="px-5 py-3 whitespace-nowrap text-foreground/85">
-                                        {formatDate(session.started_at)}
+                                        {formatDate(session.startedAt)}
                                     </td>
                                     <td className="px-5 py-3 whitespace-nowrap text-foreground/85">
-                                        {!session.ended_at ? (
+                                        {!session.endedAt ? (
                                             <span className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
                                                 Trwa
                                             </span>
                                         ) : (
-                                            formatDate(session.ended_at)
+                                            formatDate(session.endedAt)
                                         )}
                                     </td>
                                     <td className="px-5 py-3 text-foreground/90">
                                         {calculateDuration(
-                                            session.started_at,
-                                            session.ended_at,
+                                            session.startedAt,
+                                            session.endedAt,
                                         )}
                                     </td>
                                 </tr>

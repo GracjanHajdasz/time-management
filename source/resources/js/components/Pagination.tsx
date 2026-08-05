@@ -5,9 +5,14 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { router } from '@inertiajs/react';
-import { PaginationProps } from '@/types/props';
 
-export default function Pagination<T>({ paginatedData }: PaginationProps<T>) {
+type Props<T> = {
+    paginatedData: Omit<App.Data.PaginationData, 'data'> & {
+        data: T[];
+    };
+};
+
+export default function Pagination<T>({ paginatedData }: Props<T>) {
     const changePage = (page: number) => {
         router.get(
             window.location.pathname,
@@ -27,7 +32,7 @@ export default function Pagination<T>({ paginatedData }: PaginationProps<T>) {
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>
-                            {paginatedData.current_page == 1 ? (
+                            {paginatedData.currentPage == 1 ? (
                                 <button
                                     type="button"
                                     className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-background/70 text-muted-foreground/70 shadow-sm transition-colors disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-border/60 dark:bg-background/40"
@@ -40,7 +45,7 @@ export default function Pagination<T>({ paginatedData }: PaginationProps<T>) {
                                     type="button"
                                     onClick={() =>
                                         changePage(
-                                            paginatedData.current_page - 1,
+                                            paginatedData.currentPage - 1,
                                         )
                                     }
                                     className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-background/70 text-muted-foreground/80 shadow-sm transition-colors hover:border-border hover:bg-accent/70 hover:text-foreground dark:border-border/60 dark:bg-background/40 dark:hover:bg-accent/20"
@@ -55,15 +60,15 @@ export default function Pagination<T>({ paginatedData }: PaginationProps<T>) {
             </div>
 
             <span className="min-w-[6.5rem] flex-1 text-center text-[10px] font-medium tracking-[0.2em] text-muted-foreground/80 uppercase">
-                Strona {paginatedData.current_page} z {paginatedData.last_page}
+                Strona {paginatedData.currentPage} z {paginatedData.lastPage}
             </span>
 
             <div className="flex items-center">
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>
-                            {paginatedData.current_page ==
-                            paginatedData.last_page ? (
+                            {paginatedData.currentPage ==
+                            paginatedData.lastPage ? (
                                 <button
                                     type="button"
                                     className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-background/70 text-muted-foreground/70 shadow-sm transition-colors disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-border/60 dark:bg-background/40"
@@ -76,7 +81,7 @@ export default function Pagination<T>({ paginatedData }: PaginationProps<T>) {
                                     type="button"
                                     onClick={() =>
                                         changePage(
-                                            paginatedData.current_page + 1,
+                                            paginatedData.currentPage + 1,
                                         )
                                     }
                                     className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-background/70 text-muted-foreground/80 shadow-sm transition-colors hover:border-border hover:bg-accent/70 hover:text-foreground dark:border-border/60 dark:bg-background/40 dark:hover:bg-accent/20"

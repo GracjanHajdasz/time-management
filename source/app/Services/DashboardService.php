@@ -49,11 +49,11 @@ class DashboardService
                 ->getEmployeeStats($user),
 
             sessions: new PaginationData(
-            data: $sessions->items(),
-            currentPage: $sessions->currentPage(),
-            lastPage: $sessions->lastPage(),
-            perPage: $sessions->perPage(),
-            total: $sessions->total(),
+                data: $sessions->items(),
+                currentPage: $sessions->currentPage(),
+                lastPage: $sessions->lastPage(),
+                perPage: $sessions->perPage(),
+                total: $sessions->total(),
             ),
         );
     }

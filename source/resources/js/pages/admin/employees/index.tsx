@@ -1,11 +1,16 @@
 import { Head, Link } from '@inertiajs/react';
-import { EmployeesIndexProps } from '@/types/props';
 import Pagination from '@/components/Pagination';
 import { show } from '@/actions/App/Http/Controllers/EmployeeController';
-import { index as dashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import { index as dashboardIndex } from '@/actions/App/Http/Controllers/AdminDashboardController';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-export default function Index({ employees }: EmployeesIndexProps) {
+type Props = {
+    employees: Omit<App.Data.PaginationData, 'data'> & {
+        data: App.Data.EmployeeData[];
+    };
+};
+
+export default function Index({ employees }: Props) {
     return (
         <>
             <Head title="Employees" />

@@ -1,8 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
-import { AdminDashboardProps } from '@/types/props';
 import { index } from '@/actions/App/Http/Controllers/EmployeeController';
 
-export default function Dashboard({ stats }: AdminDashboardProps) {
+type Props = {
+    stats: App.Data.AdminDashboardData;
+};
+
+export default function Dashboard({ stats }: Props) {
     return (
         <>
             <Head title="Admin Dashboard" />

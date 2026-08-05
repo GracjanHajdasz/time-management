@@ -1,5 +1,4 @@
 import { router, usePage } from '@inertiajs/react';
-import { ActiveSessionProps } from '@/types/props';
 import calculateDuration from '@/functions/calculateDuration';
 import { useState, useEffect } from 'react';
 import { Clock3, Coffee, Play, Square } from 'lucide-react';
@@ -12,10 +11,12 @@ import {
     start as startWorkBreak,
 } from '@/actions/App/Http/Controllers/WorkBreakController';
 
-export default function ActiveSession({
-    activeSession,
-    activeBreak,
-}: ActiveSessionProps) {
+type Props = {
+    activeSession: App.Data.WorkSessionData | null;
+    activeBreak: App.Data.WorkBreakData | null;
+};
+
+export default function ActiveSession({ activeSession, activeBreak }: Props) {
     const { flash, errors } = usePage<any>().props;
 
     const [now, setNow] = useState(new Date());
@@ -71,7 +72,7 @@ export default function ActiveSession({
                             Czas pracy
                         </p>
                         <p className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-                            {calculateDuration(activeSession.started_at, now)}
+                            {calculateDuration(activeSession.startedAt, now)}
                         </p>
                     </div>
 
@@ -112,7 +113,7 @@ export default function ActiveSession({
                                 </p>
                             </div>
                             <p className="mt-2 text-xl font-semibold text-foreground">
-                                {calculateDuration(activeBreak.started_at, now)}
+                                {calculateDuration(activeBreak.startedAt, now)}
                             </p>
                         </div>
                     ) : null}

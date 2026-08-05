@@ -1,15 +1,22 @@
-import { ShowEmployeesProps } from '@/types/props';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, BriefcaseBusiness, Mail } from 'lucide-react';
 import { index } from '@/actions/App/Http/Controllers/EmployeeController';
 import WorkSessionHistory from '@/components/WorkSessionHistory';
 import WorkSessionStats from '@/components/WorkStats';
 
+type Props = {
+    employee: App.Data.EmployeeData;
+    employeeStats: App.Data.EmployeeStatsData;
+    employeeWorkSessions: Omit<App.Data.PaginationData, 'data'> & {
+        data: App.Data.WorkSessionData[];
+    };
+};
+
 export default function Show({
     employee,
     employeeStats,
     employeeWorkSessions,
-}: ShowEmployeesProps) {
+}: Props) {
     return (
         <>
             <Head title={employee.name} />
@@ -46,7 +53,7 @@ export default function Show({
                     </div>
                 </section>
 
-                <WorkSessionStats {...employeeStats} />
+                <WorkSessionStats stats={employeeStats} />
                 <WorkSessionHistory userSessions={employeeWorkSessions} />
             </div>
         </>
