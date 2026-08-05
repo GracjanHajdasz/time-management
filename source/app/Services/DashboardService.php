@@ -32,10 +32,6 @@ class DashboardService
         $sessions = $this->workSessionService
             ->getUserSessions($user);
 
-        $sessions->through(
-            fn ($session) => WorkSessionData::from($session)
-        );
-
         return new DashboardData(
             activeSession: $activeSession
                 ? WorkSessionData::from($activeSession)
@@ -48,13 +44,7 @@ class DashboardService
             stats: $this->employeeService
                 ->getEmployeeStats($user),
 
-            sessions: new PaginationData(
-                data: $sessions->items(),
-                currentPage: $sessions->currentPage(),
-                lastPage: $sessions->lastPage(),
-                perPage: $sessions->perPage(),
-                total: $sessions->total(),
-            ),
+            sessions: $sessions
         );
     }
 }

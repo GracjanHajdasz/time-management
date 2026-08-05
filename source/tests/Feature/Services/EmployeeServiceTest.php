@@ -30,10 +30,10 @@ it('returns only employees', function () {
 
     $employees = $service->getEmployees();
 
-    expect($employees->total())
+    expect($employees->total)
         ->toBe(1);
 
-    expect($employees->items()[0]->id)
+    expect($employees->data[0]->id)
         ->toBe($employee->id);
 
 });

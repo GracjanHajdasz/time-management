@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Data\EmployeeStatsData;
 use App\Data\EmployeeData;
+use App\Data\PaginationData;
 use App\Models\User;
 use App\Services\WorkSessionService;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EmployeeService
 {
@@ -15,15 +15,22 @@ class EmployeeService
         protected WorkBreakService $workBreakService,
     ) {}
 
-    public function getEmployees(): LengthAwarePaginator
+    public function getEmployees(): PaginationData
     {
         $employees = User::role('employee')
             ->paginate(7);
+
         $employees->through(
             fn(User $employee) => EmployeeData::from($employee)
         );
 
-        return $employees;
+        return new PaginationData(
+            data: $employees->items(),
+            currentPage: $employees->currentPage(),
+            lastPage: $employees->lastPage(),
+            perPage: $employees->perPage(),
+            total: $employees->total(),
+        );
     }
 
     public function getEmployeeStats(User $employee): EmployeeStatsData

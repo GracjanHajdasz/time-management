@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
+use App\Data\PaginationData;
 use App\Data\WorkSessionData;
 use App\Models\User;
 use App\Models\WorkSession;
 use Carbon\Carbon;
 use App\Queries\WorkBreakQuery;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class WorkSessionService
 {
@@ -15,11 +15,23 @@ class WorkSessionService
         protected WorkBreakQuery $workBreakQuery
     ) {}
 
-    public function getUserSessions(User $user): LengthAwarePaginator
+    public function getUserSessions(User $user): PaginationData
     {
-        return $user->workSessions()
+        $sessions = $user->workSessions()
             ->latest('started_at')
             ->paginate(20);
+
+        $sessions->through(
+            fn(WorkSession $session) => WorkSessionData::from($session)
+        );
+
+        return new PaginationData(
+            data: $sessions->items(),
+            currentPage: $sessions->currentPage(),
+            lastPage: $sessions->lastPage(),
+            perPage: $sessions->perPage(),
+            total: $sessions->total(),
+        );
     }
 
     public function getActiveSession(User $user): ?WorkSession
