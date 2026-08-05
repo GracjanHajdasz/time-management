@@ -2,7 +2,6 @@
 
 namespace App\Data;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -13,6 +12,6 @@ class DashboardData extends Data
         public ?WorkSessionData $activeSession,
         public ?WorkBreakData $activeBreak,
         public EmployeeStatsData $stats,
-        public LengthAwarePaginator $sessions,
+        public PaginationData $sessions,
     ) {}
 }

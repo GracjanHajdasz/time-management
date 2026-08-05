@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Data\DashboardData;
 use App\Data\WorkSessionData;
 use App\Data\WorkBreakData;
+use App\Data\PaginationData;
 use App\Models\User;
 use App\Queries\WorkBreakQuery;
 
@@ -47,7 +48,13 @@ class DashboardService
             stats: $this->employeeService
                 ->getEmployeeStats($user),
 
-            sessions: $sessions,
+            sessions: new PaginationData(
+            data: $sessions->items(),
+            currentPage: $sessions->currentPage(),
+            lastPage: $sessions->lastPage(),
+            perPage: $sessions->perPage(),
+            total: $sessions->total(),
+            ),
         );
     }
 }
