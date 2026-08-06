@@ -89,33 +89,39 @@ class WorkSessionService
 
     public function getThisWeekWorkMinutes(User $user): int
     {
-        $now = Carbon::now();
-        $totalMinutes = 0;
-        $thisWeekSessions = $user->workSessions()->whereBetween('started_at', [
-            $now->copy()->startOfWeek(),
-            $now->copy()->endOfWeek(),
-        ])->get();
-
-        foreach($thisWeekSessions as $session) {
-            $totalMinutes += $this->calculateSessionMinutes($session);
-        }
-        
-        return (int) $totalMinutes;
+        return $this->getWorkMinutesForPeriod(
+            $user,
+            now()->startOfWeek(),
+            now()->endOfWeek()
+        );
     }
 
     public function getThisMonthWorkMinutes(User $user): int
     {
-        $now = Carbon::now();
+        return $this->getWorkMinutesForPeriod(
+            $user,
+            now()->startOfMonth(),
+            now()->endOfMonth()
+        );
+    }
+
+    public function getWorkMinutesForPeriod(
+        User $user,
+        Carbon $start,
+        Carbon $end
+    ): int
+    {
         $totalMinutes = 0;
-        $thisMonthSessions = $user->workSessions()->whereBetween('started_at', [
-            $now->copy()->startOfMonth(),
-            $now->copy()->endOfMonth(),
+
+        $periodSessions = $user->workSessions()->whereBetween('started_at', [
+            $start,
+            $end,
         ])->get();
 
-        foreach($thisMonthSessions as $session) {
+        foreach($periodSessions as $session) {
             $totalMinutes += $this->calculateSessionMinutes($session);
         }
-    
+
         return (int) $totalMinutes;
     }
 
