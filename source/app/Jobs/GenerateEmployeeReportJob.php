@@ -17,9 +17,13 @@ class GenerateEmployeeReportJob implements ShouldQueue
 
     public function handle(ReportService $reportService): void
     {
-        $reportService->generateEmployeeReport(
+        $reports = $reportService->generateEmployeeReport(
             $this->month,
-            $this->year,
+            $this->year
         );
+
+        logger()->info('Report generated', [
+            'employees_count' => $reports->count(),
+        ]);
     }
 }

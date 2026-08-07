@@ -45,4 +45,40 @@ class ReportService
 
         return $reports;
     }
+
+    public function exportEmployeeReportToCsv(
+        int $month,
+        int $year
+    ): string
+    {
+        $reports = $this->generateEmployeeReport(
+            $month,
+            $year
+        );
+
+        $path = "reports/employees-{$year}-{$month}.csv";
+
+        $handle = fopen(
+            storage_path("app/private/{$path}"),
+            'w'
+        );
+
+        fputcsv($handle, [
+            'Employee Name',
+            'Email',
+            'Worked Minutes',
+        ]);
+
+        foreach ($reports as $report) {
+            fputcsv($handle, [
+                $report->employeeName,
+                $report->email,
+                $report->workedMinutes,
+            ]);
+        }
+
+        fclose($handle);
+
+        return $path;
+    }
 }
