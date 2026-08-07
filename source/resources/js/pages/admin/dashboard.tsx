@@ -1,4 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
+import { ArrowRight, FileText } from 'lucide-react';
 import { index } from '@/actions/App/Http/Controllers/EmployeeController';
 import { generate } from '@/actions/App/Http/Controllers/AdminReportController';
 
@@ -35,8 +36,22 @@ export default function Dashboard({ stats }: Props) {
                         </p>
                     </div>
 
-                    <button onClick={() => router.post(generate())}>
-                        Generuj raport pracowników
+                    <button
+                        type="button"
+                        onClick={() => router.post(generate())}
+                        className="flex items-center justify-between rounded-2xl border border-sidebar-border/70 bg-card/70 p-6 text-left shadow-sm transition hover:bg-background"
+                    >
+                        <div>
+                            <p className="text-sm text-muted-foreground">
+                                Report generation
+                            </p>
+                            <p className="mt-2 text-xl font-semibold text-foreground">
+                                Generuj raport pracowników
+                            </p>
+                        </div>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-sidebar-border/70 bg-background/70 text-primary">
+                            <FileText className="h-5 w-5" />
+                        </div>
                     </button>
                 </div>
             </div>
