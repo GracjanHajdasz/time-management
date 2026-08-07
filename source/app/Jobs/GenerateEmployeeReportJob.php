@@ -13,7 +13,9 @@ class GenerateEmployeeReportJob implements ShouldQueue
     public function __construct(
         public int $month,
         public int $year
-    ) {}
+    ) {
+        $this->onQueue('default');
+    }
 
     public function handle(ReportService $reportService): void
     {
