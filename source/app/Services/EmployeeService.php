@@ -56,4 +56,17 @@ class EmployeeService
         );
             
     }
+
+    public function updateEmployee(
+        User $employee,
+        array $data
+    ): User
+    {
+        $employee->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ]);
+
+        return $employee;
+    }
 }

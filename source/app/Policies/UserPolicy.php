@@ -18,13 +18,13 @@ class UserPolicy
     }
 
 
-    public function update(User $user): bool
+    public function update(User $user, User $employee): bool
     {
         return $user->can('edit employees');
     }
 
 
-    public function delete(User $user): bool
+    public function delete(User $user, User $employee): bool
     {
         return $user->can('delete employees');
     }

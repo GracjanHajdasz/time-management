@@ -34,6 +34,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
             AdminReportController::class,
             'generate'
         ])->name('admin.reports.employees');
+    Route::put('/employees/{employee}', [
+        EmployeeController::class,
+        'update'
+    ])->name('admin.employees.update');
 });
 
 require __DIR__.'/settings.php';

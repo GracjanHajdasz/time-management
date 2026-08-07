@@ -6,8 +6,8 @@ use App\Data\PaginationData;
 use App\Data\WorkSessionData;
 use App\Models\User;
 use App\Models\WorkSession;
-use Carbon\Carbon;
 use App\Queries\WorkBreakQuery;
+use Carbon\CarbonInterface;
 
 class WorkSessionService
 {
@@ -107,8 +107,8 @@ class WorkSessionService
 
     public function getWorkMinutesForPeriod(
         User $user,
-        Carbon $start,
-        Carbon $end
+        CarbonInterface $start,
+        CarbonInterface $end
     ): int
     {
         $totalMinutes = 0;
