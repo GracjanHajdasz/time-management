@@ -6,6 +6,7 @@ use App\Data\EmployeeReportData;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 
 class ReportService
 {
@@ -46,6 +47,7 @@ class ReportService
         return $reports;
     }
 
+
     public function exportEmployeeReportToCsv(
         int $month,
         int $year
@@ -56,28 +58,35 @@ class ReportService
             $year
         );
 
-        $path = "reports/employees-{$year}-{$month}.csv";
+        $directory = storage_path('app/private/reports');
 
-        $handle = fopen(
-            storage_path("app/private/{$path}"),
-            'w'
-        );
+        if (! File::exists($directory)) {
+            File::makeDirectory(
+                $directory,
+                0755,
+                true
+            );
+        }
 
-        fputcsv($handle, [
+        $path = "{$directory}/employees-{$year}-{$month}.csv";
+
+        $file = fopen($path, 'w');
+
+        fputcsv($file, [
             'Employee Name',
             'Email',
             'Worked Minutes',
         ]);
 
         foreach ($reports as $report) {
-            fputcsv($handle, [
+            fputcsv($file, [
                 $report->employeeName,
                 $report->email,
                 $report->workedMinutes,
             ]);
         }
 
-        fclose($handle);
+        fclose($file);
 
         return $path;
     }

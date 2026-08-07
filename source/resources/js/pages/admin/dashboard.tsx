@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { index } from '@/actions/App/Http/Controllers/EmployeeController';
+import { generate } from '@/actions/App/Http/Controllers/AdminReportController';
 
 type Props = {
     stats: App.Data.AdminDashboardData;
@@ -33,6 +34,10 @@ export default function Dashboard({ stats }: Props) {
                             {stats.activeSessions}
                         </p>
                     </div>
+
+                    <button onClick={() => router.post(generate())}>
+                        Generuj raport pracowników
+                    </button>
                 </div>
             </div>
         </>

@@ -5,6 +5,7 @@ use App\Http\Controllers\WorkSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WorkBreakController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -29,6 +30,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         ->name('admin.employees.index');
     Route::get('/admin/employees/{employee}', [EmployeeController::class, 'show'])
         ->name('admin.employees.show');
+    Route::post('/reports/employees', [
+            AdminReportController::class,
+            'generate'
+        ])->name('admin.reports.employees');
 });
 
 require __DIR__.'/settings.php';
