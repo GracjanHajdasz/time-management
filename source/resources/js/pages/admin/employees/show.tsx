@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
-import { ArrowLeft, BriefcaseBusiness, Mail } from 'lucide-react';
+import { ArrowLeft, BriefcaseBusiness, Edit, Mail } from 'lucide-react';
 import { index } from '@/actions/App/Http/Controllers/EmployeeController';
 import { update } from '@/actions/App/Http/Controllers/EmployeeController';
 import WorkSessionHistory from '@/components/WorkSessionHistory';
@@ -19,7 +19,14 @@ export default function Show({
     employeeStats,
     employeeWorkSessions,
 }: Props) {
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(() => {
+        if (typeof window === 'undefined') {
+            return false;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        return params.get('edit') === '1';
+    });
 
     const [form, setForm] = useState({
         name: employee.name,
@@ -63,9 +70,11 @@ export default function Show({
                                 </p>
                             </div>
                             <button
+                                type="button"
                                 onClick={() => setIsEditing(!isEditing)}
-                                className="rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground"
+                                className="inline-flex items-center gap-2 rounded-xl border border-sidebar-border/70 bg-background/70 px-4 py-2 text-sm font-medium text-foreground transition hover:bg-background"
                             >
+                                <Edit className="h-4 w-4" />
                                 {isEditing ? 'Anuluj' : 'Edytuj'}
                             </button>
                         </div>
@@ -76,10 +85,12 @@ export default function Show({
                         <span>{employee.email}</span>
                     </div>
                     {isEditing && (
-                        <section className="rounded-2xl border border-sidebar-border/70 bg-card/70 p-5 shadow-sm">
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="text-sm">Imię</label>
+                        <section className="mt-5 rounded-2xl border border-sidebar-border/70 bg-card/70 p-5 shadow-sm">
+                            <div className="space-y-5">
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-foreground">
+                                        Imię
+                                    </label>
 
                                     <input
                                         value={form.name}
@@ -89,12 +100,15 @@ export default function Show({
                                                 name: e.target.value,
                                             })
                                         }
-                                        className="mt-1 w-full rounded-lg border p-2"
+                                        placeholder="Wprowadź imię pracownika"
+                                        className="w-full rounded-xl border border-sidebar-border/70 bg-background/70 px-3 py-2.5 text-sm text-foreground shadow-sm transition outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                                     />
                                 </div>
 
-                                <div>
-                                    <label className="text-sm">Email</label>
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-foreground">
+                                        Email
+                                    </label>
 
                                     <input
                                         value={form.email}
@@ -104,16 +118,28 @@ export default function Show({
                                                 email: e.target.value,
                                             })
                                         }
-                                        className="mt-1 w-full rounded-lg border p-2"
+                                        placeholder="Wprowadź adres email"
+                                        className="w-full rounded-xl border border-sidebar-border/70 bg-background/70 px-3 py-2.5 text-sm text-foreground shadow-sm transition outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                                     />
                                 </div>
 
-                                <button
-                                    onClick={submit}
-                                    className="rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground"
-                                >
-                                    Zapisz zmiany
-                                </button>
+                                <div className="flex flex-wrap gap-3 pt-1">
+                                    <button
+                                        type="button"
+                                        onClick={submit}
+                                        className="inline-flex items-center rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90"
+                                    >
+                                        Zapisz zmiany
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsEditing(false)}
+                                        className="inline-flex items-center rounded-xl border border-sidebar-border/70 bg-background/70 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-background"
+                                    >
+                                        Anuluj
+                                    </button>
+                                </div>
                             </div>
                         </section>
                     )}

@@ -38,6 +38,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         EmployeeController::class,
         'update'
     ])->name('admin.employees.update');
+    Route::delete('/employees/{employee}', [
+        EmployeeController::class,
+        'destroy'
+    ])->name('admin.employees.destroy');
 });
 
 require __DIR__.'/settings.php';

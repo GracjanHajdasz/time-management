@@ -69,4 +69,9 @@ class EmployeeService
 
         return $employee;
     }
+
+    public function deleteEmployee(User $employee): bool
+    {
+        return $employee->delete();
+    }
 }
