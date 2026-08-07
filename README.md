@@ -19,3 +19,6 @@ admin@example.com
 
 Password:
 password
+
+Admin dashboard:
+.../admin
